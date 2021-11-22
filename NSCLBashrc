@@ -265,6 +265,18 @@ fi
 alias cp='cp -ip'
 alias mv='mv -i'
 alias rm='rm -i'
+alias l='ls'
+alias ll='ls -l'
+alias lll='ls -al'
+alias sl='ls | more'
+alias cls='clear'
+alias h='history|tail -32'
+alias m='more'
+alias c='cat'
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+alias dir='ll'
 
 #alias ls='ls -F --color=tty'
 
