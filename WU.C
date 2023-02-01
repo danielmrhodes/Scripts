@@ -1,4 +1,4 @@
-void Convert(double val, int A, int L, bool elec = true) {
+void Convert(double val_Wu, int A, int L, bool elec = true) {
 
   const double PI = TMath::Pi();
 
@@ -24,9 +24,9 @@ void Convert(double val, int A, int L, bool elec = true) {
     
   }
 
-  std::cout << "B(" << chara << L << ") = " << val << " W.u" << std::endl;
-  std::cout << "B(" << chara << L << ") = " << factor*val << " " << units << " fm^" << power << std::endl;
-  std::cout << "B(" << chara << L << ") = " << factor*val/(TMath::Power(100,power/2)) << " " << units << " b^"
+  std::cout << "B(" << chara << L << ") = " << val_Wu << " W.u" << std::endl;
+  std::cout << "B(" << chara << L << ") = " << factor*val_Wu << " " << units << " fm^" << power << std::endl;
+  std::cout << "B(" << chara << L << ") = " << factor*val_Wu/(TMath::Power(100,power/2)) << " " << units << " b^"
 	    << power/2 << std::endl;
   
   return;

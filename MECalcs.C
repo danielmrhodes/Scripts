@@ -1,3 +1,4 @@
+/////
 //These are only for the first 2+ moment and transition to ground state
 double Q2P(double dme) {
 
@@ -9,6 +10,47 @@ double DME(double q2p) {
 
   return q2p/(sqrt(16.0*TMath::Pi()/5.0)*sqrt(2.0/7.0)/sqrt(5.0));
   
+}
+
+double BE2(double tme, bool up) {
+  
+  if(up)
+    return tme*tme;
+  
+  return tme*tme/5.0;
+  
+}
+
+double TME(double be2, bool up) {
+  
+  if(up)
+    return sqrt(be2);
+ 
+  return sqrt(5.0*be2);
+  
+}
+/////
+
+double BE1(double t12, double egam) {
+
+  return 0.435/(TMath::Power(egam,3.0)*t12*1000.0*100.);
+  
+}
+
+double BE2(double t12, double egam) {
+
+  return 564.0/(TMath::Power(egam,5.0)*t12*10000.0);
+  
+}
+
+double BE3(double t12, double egam) {
+
+  return 1212.0/(TMath::Power(egam,7.0)*t12*1000000.0/1000.0);
+  
+}
+
+double BM1(double t12, double egam) {
+  return 39.4/(TMath::Power(egam,3.0)*t12*1000.0);
 }
 
 double Q4P(double dme) {
@@ -42,13 +84,9 @@ double DME(double Q, double spin, int mult) {
 
 }
 
-double BE2(double tme, bool up) {
-  
-  if(up) {
-    return tme*tme;
-  }
-  
-  return tme*tme/5.0;
+double TME(double bsl, double spin) {
+
+  return TMath::Sqrt((2.0*spin + 1.0)*bsl);
   
 }
 
@@ -58,20 +96,9 @@ double BSL(double tme, double spin) {
 
 }
 
-double TME(double be2, bool up) {
-  
-  if(up) {
-    return sqrt(be2);
-  }
- 
-  return sqrt(5.0*be2);
-  
-}
+double tauE2(double tme, double egam, double spin) {
 
-double BE2(double t12, double egam) {
-
-  //return 564.0/(TMath::Power(egam,5.0)*t12*10000.0);
-  return 564.0/(TMath::Power(egam,5.0)*t12*10000.0);
+  return 816./(10000.0*BSL(tme,spin)*TMath::Power(egam,5.0));
   
 }
 

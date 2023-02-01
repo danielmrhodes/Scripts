@@ -1,13 +1,18 @@
 //106Cd
-double beam_Z = 48.;
-double beam_mass = 98626.9;
+//double beam_Z = 48.;
+//double beam_mass = 98626.9;
+
+//24Ne
+//double beam_Z = 10.;
+//double beam_mass = 22349.9;
 
 //80Ge
 //double beam_Z = 32.;
 //double beam_mass = 74441.6;
 
-//80Kr
-//double beam_Z = 36.;
+//78,80Kr
+double beam_Z = 36.;
+double beam_mass = 72582.4;
 //double beam_mass = 74442.6;
 
 //40S
@@ -19,8 +24,8 @@ double beam_mass = 98626.9;
 //double beam_mass = 119141.4;
 
 //208Pb
-double targ_Z = 82.;
-double targ_mass = 193688.0;
+//double targ_Z = 82.;
+//double targ_mass = 193688.0;
 
 //48Ti
 //double targ_Z = 22.;
@@ -30,13 +35,23 @@ double targ_mass = 193688.0;
 //double targ_Z = 78.;
 //double targ_mass = 182540.;
 
-double Ep = 450.0; // 106Cd HE
+//197Au
+double targ_Z = 79.;
+double targ_mass = 183473.2;
+
+//110Pd
+//double targ_Z = 46.;
+//double targ_mass = 102376.0;
+
+//double Ep = 450.0; // 106Cd HE
 //double Ep = 415.1; // 106Cd LE
 //double Ep = 294.0; //106Cd Ti
 //double Ep = 268.0; //80Ge, 80Kr
 //double Ep = 281.6; //80Ge
 //double Ep = 131.0; //40S
 //double Ep = 487.7; //128Xe
+//double Ep = 77.0; //24Ne
+double Ep = 413.0; //78Kr HE
 
 double Ex = 0.0;
 
@@ -50,18 +65,16 @@ double Theta_CM_FP(double ThetaLAB, bool sol2=false) {
   double tau = (beam_mass/targ_mass)/std::sqrt(1 - (Ex/Ep)*(1 + beam_mass/targ_mass));
   
   if(std::sin(ThetaLAB) > 1.0/tau) {
-    ThetaLAB = std::asin(1.0/tau);
 
-    if(ThetaLAB < 0) {
-      ThetaLAB += TMath::Pi();
-    }
+    ThetaLAB = std::asin(1.0/tau);
+    if(ThetaLAB < 0)
+      ThetaLAB += TMath::Pi();  
 
     return std::asin(tau*std::sin(ThetaLAB)) + ThetaLAB;
   }
 
-  if(sol2) {
+  if(sol2)
     return std::asin(tau*std::sin(-ThetaLAB)) + ThetaLAB + TMath::Pi();
-  }
   
   return std::asin(tau*std::sin(ThetaLAB)) + ThetaLAB;
   
@@ -72,18 +85,16 @@ double Theta_CM_FR(double ThetaLAB, bool sol2=false) {
   double tau = 1.0/std::sqrt(1 - (Ex/Ep)*(1 + beam_mass/targ_mass));
   
   if(std::sin(ThetaLAB) > 1.0/tau) {
-    ThetaLAB = std::asin(1.0/tau);
 
-    if(ThetaLAB < 0) {
+    ThetaLAB = std::asin(1.0/tau);
+    if(ThetaLAB < 0)
       ThetaLAB += TMath::Pi();
-    }
 
     return std::asin(tau*std::sin(ThetaLAB)) + ThetaLAB;
   }
 
-  if(sol2) {
+  if(sol2)
     return -std::asin(tau*std::sin(-ThetaLAB)) - ThetaLAB;
-  }
   
   return TMath::Pi() - (std::asin(tau*std::sin(ThetaLAB)) + ThetaLAB);
   
@@ -94,9 +105,8 @@ double Theta_LAB(double thetaCM) {
   double tau = (beam_mass/targ_mass)/std::sqrt(1 - (Ex/Ep)*(1 + beam_mass/targ_mass));
   double tanTheta = std::sin(thetaCM)/(std::cos(thetaCM) + tau);
 
-  if(tanTheta > 0) {
+  if(tanTheta > 0)
     return std::atan(tanTheta);
-  }
   
   return std::atan(tanTheta) + TMath::Pi();
 
@@ -105,10 +115,8 @@ double Theta_LAB(double thetaCM) {
 double Theta_LAB_Max() {
 
   double tau = (beam_mass/targ_mass)/std::sqrt(1 - (Ex/Ep)*(1 + beam_mass/targ_mass));
-
-  if(tau < 1.0) {
+  if(tau < 1.0)
     return TMath::Pi();
-  }
   
   return std::asin(1.0/tau);
   
@@ -126,7 +134,6 @@ double Recoil_Theta_LAB(double thetaCM) {
 double Recoil_Theta_LAB_Max() {
 
   double tau = 1.0/std::sqrt(1 - (Ex/Ep)*(1 + beam_mass/targ_mass));
-  
   return std::asin(1.0/tau);
     
 }
@@ -190,6 +197,44 @@ double Recoil_Beta_LAB(double thetaCM) {
   double gam = energy/targ_mass + 1.0;
 
   return TMath::Sqrt(1.0 - 1.0/(gam*gam));
+  
+}
+
+double Esafe(int beam_A, int targ_A) {
+
+  double Rmin = 1.25*(TMath::Power(double(beam_A),1./3.) + TMath::Power(double(targ_A),1./3.)) + 5.0;
+  double fac = 1.439965*beam_Z*targ_Z*(beam_A + targ_A)/double(targ_A);
+
+  return fac/Rmin;
+}
+
+double ECB(int beam_A, int targ_A) {
+
+  double Rmin = 1.25*(TMath::Power(double(beam_A),1./3.) + TMath::Power(double(targ_A),1./3.));
+  double fac = 1.439965*beam_Z*targ_Z*(beam_A + targ_A)/double(targ_A);
+  
+  return fac/Rmin;
+}
+
+double MinSep(int beam_A, int targ_A) {
+
+  double Rsum = 1.25*(TMath::Power(double(beam_A),1./3.) + TMath::Power(double(targ_A),1./3.));
+  double fac = 1.439965*beam_Z*targ_Z*(beam_A + targ_A)/double(targ_A);
+
+  return fac/Ep - Rsum;
+  
+}
+
+double ImpactParameter(double thetaCM) {
+
+  double mu = 1.0/(1.0/beam_mass + 1.0/targ_mass);
+
+  double gam = Ep/beam_mass + 1.0;
+  double beta = TMath::Sqrt(1.0 - 1.0/(gam*gam));
+  
+  double a = 1.439965*beam_Z*targ_Z/(mu*beta*beta);
+
+  return a/(gam*TMath::Tan(thetaCM/2.0));
   
 }
 
@@ -471,7 +516,6 @@ void RuthCM_v_CM_Angle() {
   for(int i=0;i<nBins;i++) {
     
     double theta = (i+1)*TMath::Pi()/(double)nBins;
-    
     g->SetPoint(i,theta*TMath::RadToDeg(),RuthCM(theta));
     
   }
@@ -507,9 +551,8 @@ void RuthLAB_v_LAB_Angle() {
     
     double theta = (i+1)*TMath::Pi()/(double)nBins;
     bool sol2 = false;
-    if(theta > turning_point) {
+    if(theta > turning_point)
       sol2 = true;
-    }
     
     double thetaL = Theta_LAB(theta);
     g->SetPoint(i,thetaL*TMath::RadToDeg(),RuthLAB(thetaL,sol2));
@@ -906,25 +949,18 @@ void PrintSystem() {
 
   std::cout << "\nProjectile Z: " << beam_Z << ", Projectile Mass: " << beam_mass << " MeV/c^2"
 	      << "\nRecoil Z: " << targ_Z << ", Recoil Mass: " << targ_mass << " MeV/c^2"
-	      << "\nEp = " << Ep << " MeV, Ex = " << Ex << " Mev"
+	      << "\nEp = " << Ep << " MeV, Ex = " << Ex << " Mev\n"
 	      << std::endl;
 
   return;
 }
 
-double ECB(int beam_A, int targ_A) {
-
-  double Rmin = 1.25*(TMath::Power(double(beam_A),1./3.) + TMath::Power(double(targ_A),1./3.)) +5.0;
-  double fac = beam_Z*targ_Z*(beam_A + targ_A)/double(targ_A);
-  
-  return 1.439965*fac/Rmin;
-}
-
 void Print(double thetaCM, bool print_system = false) {
 
-  if(print_system) {
+  if(print_system)
     PrintSystem();
-  }
+  else
+    std::cout << "\n";
 
   double thetaL = Theta_LAB(thetaCM);
   double r2d = TMath::RadToDeg();
@@ -941,7 +977,7 @@ void Print(double thetaCM, bool print_system = false) {
     rSol2 = "true";
   }
   
-  std::cout << "\nTheta_CM = " << thetaCM*r2d << " deg, Ruth_CM = " << RuthCM(thetaCM)
+  std::cout << "Theta_CM = " << thetaCM*r2d << " deg, Ruth_CM = " << RuthCM(thetaCM)
 	    << " mb/sr \n\nProjectile:\nTheta_LAB = " << thetaL*r2d << " deg, Ruth_LAB = "
 	    << RuthLAB(thetaL,sol2) << " mb/sr (Projectile Sol2 = " << pSol2 << ")\nKE_LAB = "
 	    << KE_LAB(thetaCM) << " MeV, Beta_LAB = " << Beta_LAB(thetaCM)
@@ -959,6 +995,7 @@ void DrawLinesLAB(bool include_recon = false, double y1 = 0, double y2 = 500) {
   TLine* line = new TLine();
   line->SetLineStyle(9);
   line->SetLineWidth(5);
+  line->SetLineColor(kBlue);
 
   //z1 = 3.0 cm
   double x1 = 20.1;
@@ -973,6 +1010,7 @@ void DrawLinesLAB(bool include_recon = false, double y1 = 0, double y2 = 500) {
   line->DrawLine(x4,y1,x4,y2);
 
   if(include_recon) {
+    line->SetLineColor(kRed);
     double x5 = Theta_LAB(Theta_CM_FR(x1*TMath::DegToRad(),false))*TMath::RadToDeg();
     double x6 = Theta_LAB(Theta_CM_FR(x2*TMath::DegToRad(),false))*TMath::RadToDeg();
     line->DrawLine(x5,y1,x5,y2);
@@ -988,7 +1026,8 @@ void DrawLinesCM(bool include_recon = false, double y1 = 0, double y2 = 500) {
   TLine* line = new TLine();
   line->SetLineStyle(9);
   line->SetLineWidth(5);
-
+  line->SetLineColor(kBlue);
+  
   //z1 = 3.0 cm
   double x1 = Theta_CM_FP(20.1*TMath::DegToRad(),false)*TMath::RadToDeg();
   double x2 = Theta_CM_FP(49.4*TMath::DegToRad(),false)*TMath::RadToDeg();
@@ -1002,6 +1041,7 @@ void DrawLinesCM(bool include_recon = false, double y1 = 0, double y2 = 500) {
   line->DrawLine(x4,y1,x4,y2);
 
   if(include_recon) {
+    line->SetLineColor(kRed);
     double x5 = Theta_CM_FR(20.1*TMath::DegToRad(),false)*TMath::RadToDeg();
     double x6 = Theta_CM_FR(49.4*TMath::DegToRad(),false)*TMath::RadToDeg();
     line->DrawLine(x5,y1,x5,y2);
