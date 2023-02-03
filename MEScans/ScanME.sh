@@ -1,24 +1,30 @@
-for i in {1..21..1}
+for i in {1..81..1}
 do
     echo "step $i" 
     root -l -q WriteME.C > /dev/null 2>&1
-    gosia < ge80.INTI.inp > /dev/null 2>&1
-    gosia < ge80.MAP.inp > /dev/null 2>&1
-    gosia < ge80_1.inp > /dev/null 2>&1
-    gosia < ge80.INTI.inp > /dev/null 2>&1
-    gosia < ge80.MAP.inp > /dev/null 2>&1
-    gosia < ge80_2.inp > /dev/null 2>&1
-    gosia < ge80.INTI.inp > /dev/null 2>&1
-    gosia < ge80.MAP.inp > /dev/null 2>&1
-    gosia < ge80_3.inp > /dev/null 2>&1
-    gosia < ge80.INTI.inp > /dev/null 2>&1
-    gosia < ge80.MAP.inp > /dev/null 2>&1
-    gosia < ge80_4.inp > /dev/null 2>&1
-    gosia < ge80.INTI.inp > /dev/null 2>&1
-    gosia < ge80.MAP.inp > /dev/null 2>&1
-    gosia < ge80_2.inp > /dev/null 2>&1
-    gosia < ge80.INTI.inp > /dev/null 2>&1
-    gosia < ge80.MAP.inp > /dev/null 2>&1
-    gosia < ge80_3.inp > /dev/null 2>&1
+    gosia < kr80.INTI.inp > /dev/null 2>&1
+    gosia < kr80.MAP.inp > /dev/null 2>&1
+    gosia < kr80_1.inp > /dev/null 2>&1  
+    gosia < kr80.INTI.inp > /dev/null 2>&1
+    gosia < kr80.MAP.inp > /dev/null 2>&1
+    gosia < kr80_3.inp > /dev/null 2>&1
+    gosia < kr80.INTI.inp > /dev/null 2>&1
+    gosia < kr80.MAP.inp > /dev/null 2>&1
+    gosia < kr80_4.inp > /dev/null 2>&1
+    gosia < kr80.INTI.inp > /dev/null 2>&1
+    gosia < kr80.MAP.inp > /dev/null 2>&1
+    gosia < kr80_5.inp > /dev/null 2>&1
+    gosia < kr80.INTI.inp > /dev/null 2>&1
+    gosia < kr80.MAP.inp > /dev/null 2>&1
+    gosia < kr80_3.inp > /dev/null 2>&1
+    gosia < kr80.INTI.inp > /dev/null 2>&1
+    gosia < kr80.MAP.inp > /dev/null 2>&1
+    gosia < kr80_4.inp > /dev/null 2>&1
+    gosia < kr80.INTI.inp > /dev/null 2>&1
+    gosia < kr80.MAP.inp > /dev/null 2>&1
+    gosia < kr80_5.inp > /dev/null 2>&1
+    gosia < kr80.INTI.inp > /dev/null 2>&1
+    gosia < kr80.MAP.inp > /dev/null 2>&1
+    gosia < kr80_3.inp > /dev/null 2>&1
     root -l -q WriteOutput.C > /dev/null 2>&1
 done

@@ -1,7 +1,7 @@
-TGraph* PlotME(int index_y= 0, int index_x = 4, std::string fname = "output_me4_new.txt") {
+TGraph* PlotME(int index_y= 0, int index_x = 4, std::string fname = "output4_m4_NoDL_ok.txt") {
 
   double chi_cut = 1.0;
-  int nd = 23;
+  int nd = 38;
 
   std::vector<double> ys;
   std::vector<double> xs;
@@ -52,10 +52,10 @@ TGraph* PlotME(int index_y= 0, int index_x = 4, std::string fname = "output_me4_
   gr->SetMarkerStyle(20);
   gr->SetMarkerSize(1.5);
   gr->SetTitle("");
-  //gr->GetXaxis()->SetTitle("Matrix Element");
-  //gr->GetYaxis()->SetTitle("Matrix Element");
-  //gr->GetYaxis()->SetTitleSize(0.06);
-  //gr->GetYaxis()->SetTitleOffset(0.65);
+  gr->GetXaxis()->SetTitle("Matrix Element");
+  gr->GetYaxis()->SetTitle("Matrix Element");
+  gr->GetYaxis()->SetTitleSize(0.06);
+  gr->GetYaxis()->SetTitleOffset(0.65);
   gr->GetXaxis()->SetLabelSize(0.05);
   gr->GetYaxis()->SetLabelSize(0.05);
   gr->SetEditable(kFALSE);
@@ -65,32 +65,49 @@ TGraph* PlotME(int index_y= 0, int index_x = 4, std::string fname = "output_me4_
   //double xh = 0.95;
   //gr->GetXaxis()->SetRangeUser(xl,xh);
   
-  if(index_y == 0) {
-    //gr->GetYaxis()->SetTitle("Total #chi^{2}");
-
-    double chi2_min = 999999.;
-    double xmin = 0.0;
-    for(int i=0;i<gr->GetN();i++) {
-
-      double chi2 = gr->GetY()[i];
-      if(chi2 < chi2_min) {
-	chi2_min = chi2;
-	xmin = gr->GetX()[i];
-      }
+  if(index_y)
+    return gr;
+  
+  gr->GetYaxis()->SetTitle("Total #chi^{2}");
+  double chi2_min = 99999999.;
+  double best_me = 0.0;
+  for(int i=0;i<gr->GetN();i++) {
     
+    double chi2 = gr->GetY()[i];
+    if(chi2 < chi2_min) {
+      chi2_min = chi2;
+      best_me = gr->GetX()[i];
     }
-
-    std::cout << "Minimum chi2 (" << chi2_min << ") at " << xmin << std::endl;
-    
-    TLine* l = new TLine();
-    l->SetLineColor(kRed);
-    l->SetLineWidth(2);
-
-    //l->DrawLine(xl,chi2_min + chi_cut,xh,chi2_min + chi_cut);
-    l->DrawLine(gr->GetXaxis()->GetXmin(),chi2_min + chi_cut,
-		gr->GetXaxis()->GetXmax(),chi2_min + chi_cut);
-    
   }
+
+  double min_me = best_me;
+  double max_me = best_me;
+  for(int i=0;i<gr->GetN();i++) {
+
+    double me = gr->GetX()[i];
+    double chi2 = gr->GetY()[i];
+    
+    if(chi2 < chi2_min + chi_cut) {
+      if(me < min_me)
+	min_me = me;
+      if(me > max_me)
+	max_me = me;
+    }
+  }
+
+  double err_up = max_me - best_me;
+  double err_dn = best_me - min_me;
+
+  std::cout << "Minimum chi2 (" << chi2_min << ") at " << best_me << std::endl;
+  std::cout << "ME Range: " << best_me << " + " << err_up << " - " << err_dn << " (" << min_me << "," << max_me << ")"
+	    << std::endl;
+  
+  TLine* l = new TLine();
+  l->SetLineColor(kRed);
+  l->SetLineWidth(2);
+  
+  l->DrawLine(gr->GetXaxis()->GetXmin(),chi2_min + chi_cut,
+	      gr->GetXaxis()->GetXmax(),chi2_min + chi_cut);
   
   return gr;
 

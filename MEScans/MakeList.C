@@ -1,8 +1,8 @@
 void MakeList() {
 
-  double ll = 0.4;
-  double ul = 1.1;
-  int st = 21;
+  double ll = -0.96;
+  double ul = 1.0;
+  int st = 81;
   
   std::ofstream file;
   file.open("list.txt",std::ios::out);

@@ -1,0 +1,832 @@
+double chi_cut = 1.0;
+const int nd = 38;
+
+
+std::string fname = "output_4-1-delta.txt";
+const int index_x = 4;
+const int index_y = 3;
+const int index_z = 2;
+
+const double x_ll = 0.52;
+const double x_ul = 0.80;
+const int x_st = 5;
+const int np = 8;
+
+const double y_ll = -0.57;
+const double y_ul = -0.23;
+const int y_st = 69;
+  
+const double z_ll = 0.055;
+const double z_ul = 0.085;
+const int z_st = 41;
+
+
+//_
+/*
+std::string fname = "output_4-delta.txt";
+const int index_x = 4;
+const int index_y = 3;
+const int index_z = 2;
+
+const double x_ll = 0.31;
+const double x_ul = 0.91;
+const int x_st = 5;
+const int np = 8;
+
+const double y_ll = -0.7;
+const double y_ul = -0.1;
+const int y_st = 61;
+  
+const double z_ll = 0.038;
+const double z_ul = 0.098;
+const int z_st = 31;
+*/
+
+//_4
+/*
+std::string fname = "output_4.txt";
+const int index_x = 4;
+const int index_y = 3;
+const int index_z = 2;
+
+const double x_ll = -0.96;
+const double x_ul = 1.0;
+const int x_st = 5;
+const int np = 8;
+
+const double y_ll = -0.85;
+const double y_ul = 0.05;
+const int y_st = 31;
+  
+const double z_ll = 0.05;
+const double z_ul = 0.12;
+const int z_st = 36;
+*/
+
+/*
+//_first
+std::string fname = "output_first.txt";
+const int index_x = 4;
+const int index_y = 3;
+const int index_z = 2;
+
+const double x_ll = -0.96;
+const double x_ul = 1.0;
+const int x_st = 2;
+const int np = 8;
+
+const double y_ll = -0.85;
+const double y_ul = 0.05;
+const int y_st = 10;
+  
+const double z_ll = 0.05;
+const double z_ul = 0.10;
+const int z_st = 6;
+*/
+
+int counter = 0;
+void MERange(const int index, int a1, int a2) {
+  counter++;
+
+  double x_bins = x_st*np + 1;
+  double x_sp = 0.0;
+  if(x_bins > 1)
+    x_sp = (x_ul-x_ll)/double(x_bins - 1);
+
+  double y_bins = y_st;
+  double y_sp = 0.0;
+  if(y_bins > 1)
+    y_sp = (y_ul-y_ll)/double(y_bins - 1);
+
+  double z_bins = z_st;
+  double z_sp = 0.0;
+  if(z_bins > 1)
+    z_sp = (z_ul-z_ll)/double(z_bins - 1);
+
+  double xl = x_ll - (x_sp/2.0);
+  double xh = x_ul + (x_sp/2.0);
+  double yl = y_ll - (y_sp/2.0);
+  double yh = y_ul + (y_sp/2.0);
+  double zl = z_ll - (z_sp/2.0);
+  double zh = z_ul + (z_sp/2.0);
+  
+  TH3D* h3c = new TH3D(Form("temp%02d",counter),"temp",x_bins,xl,xh,y_bins,yl,yh,z_bins,zl,zh);
+  TH3D* h3m = new TH3D(Form("cubec%02d",counter),"ME Cube",x_bins,xl,xh,y_bins,yl,yh,z_bins,zl,zh);
+  
+  for(int i=0;i<np;i++) {
+
+    std::string name = Form("Piece%i/",i+1) + fname;
+    std::ifstream file;
+    file.open(name.c_str(),std::ios::in);
+
+    if(!(file.is_open())) {
+      std::cout << "FAILED TO OPEN FILE " << name << std::endl;
+      continue;
+    }
+
+    std::string line, word;
+    while(std::getline(file,line)) {
+      
+      std::stringstream ss(line);
+      double x;
+      double y;
+      double z;
+      double c;
+      double v;
+
+      int word_num = 0;
+      while(ss >> word) {
+	
+	std::stringstream ss1(word);
+	if(word_num == 0) {
+	  ss1 >> c;
+	  c *= nd;
+	}
+	else if(word_num == index_x) {
+	  ss1 >> x;
+	}
+	else if(word_num == index_y) {
+	  ss1 >> y;
+	}
+	else if(word_num == index_z) {
+	  ss1 >> z;
+	}
+	else if(word_num == index) {
+	  ss1 >> v;
+	}
+	word_num++;
+      }
+
+      h3c->Fill(x,y,z,c);
+      if(index == index_x)
+	h3m->Fill(x,y,z,x);
+      else if(index == index_y)
+	h3m->Fill(x,y,z,y);
+      else if(index == index_z)
+	h3m->Fill(x,y,z,z);
+      else if(index)
+	h3m->Fill(x,y,z,v);
+      
+    }
+  }
+
+  const double max = h3c->GetMaximum();
+  double best_me = 0.0;
+  double minimum_tot = max;
+  for(int bx=1; bx<x_bins+1; bx++) {
+    for(int by=1; by<y_bins+1; by++) {
+      for(int bz=1; bz<z_bins+1; bz++) {
+
+	double chi2 = h3c->GetBinContent(bx,by,bz);
+	if(chi2 < minimum_tot && chi2 > 0) {
+	  minimum_tot = chi2;
+	  best_me = h3m->GetBinContent(bx,by,bz);
+	}
+	
+      }
+    }
+  }
+  
+  std::vector<double> vals;
+  for(int bx=1; bx<x_bins+1; bx++) {
+    for(int by=1; by<y_bins+1; by++) {
+      for(int bz=1; bz<z_bins+1; bz++) {
+
+	double chi2 = h3c->GetBinContent(bx,by,bz);
+	if(chi2 < minimum_tot + chi_cut && chi2 > 0)
+	  vals.push_back(h3m->GetBinContent(bx,by,bz));	
+	
+      }
+    }
+  }
+
+  double min_me = *std::min_element(vals.begin(),vals.end());
+  double max_me = *std::max_element(vals.begin(),vals.end());
+
+  double err_up = max_me - best_me;
+  double err_dn = best_me - min_me;
+  std::cout << "ME " << index << " Range: " << best_me << " + " << err_up << " - " << err_dn
+	    << " (" << min_me << "," << max_me << ")" << std::endl;
+  
+  GH2D* h2m;
+  GH2D* h2m_1s;
+  
+  if(a1 == 1 && a2 == 2) {
+
+    h2m = new GH2D(Form("msurf%02d",counter),
+		   Form("ME %d Surface;ME %d;ME %d",index,index_x,index_y),
+		   x_bins,xl,xh,y_bins,yl,yh);
+    h2m_1s = new GH2D(Form("msurfc%02d",counter),
+		      Form("Cut ME %d Surface;ME %d;ME %d",index,index_x,index_y),
+		      x_bins,xl,xh,y_bins,yl,yh);
+
+    for(int bx=1; bx<x_bins+1; bx++) {
+      for(int by=1; by<y_bins+1; by++) {
+
+	double min = max;
+	double best_me;
+	for(int bz=1; bz<z_bins+1; bz++) {
+
+	  double chi2 = h3c->GetBinContent(bx,by,bz);
+	  if(chi2 < min && chi2 > 0.0) {
+	    min = chi2;
+	    best_me = h3m->GetBinContent(bx,by,bz);
+	  }
+	  
+	}
+	
+	if(min < max)
+	  h2m->SetBinContent(bx,by,best_me);
+	  
+	if(min < minimum_tot + chi_cut)
+	  h2m_1s->SetBinContent(bx,by,best_me);
+	
+      }
+    }
+    
+  }
+  else if(a1 == 1 && a2 == 3) {
+
+    h2m = new GH2D(Form("msurf%02d",counter),
+		   Form("ME %d Surface;ME %d;ME %d",index,index_x,index_z),
+		   x_bins,xl,xh,z_bins,zl,zh);
+    h2m_1s = new GH2D(Form("msurfc%02d",counter),
+		      Form("Cut ME %d Surface;ME %d;ME %d",index,index_x,index_z),
+		      x_bins,xl,xh,z_bins,zl,zh);
+
+    for(int bx=1; bx<x_bins+1; bx++) {
+      for(int bz=1; bz<z_bins+1; bz++) {
+
+	double min = max;
+	double best_me;
+	for(int by=1; by<y_bins+1; by++) {
+	  
+	  double chi2 = h3c->GetBinContent(bx,by,bz);
+	  if(chi2 < min && chi2 > 0.0) {
+	    min = chi2;
+	    best_me = h3m->GetBinContent(bx,by,bz);
+	  }
+	  
+	}
+	
+	if(min < max)
+	  h2m->SetBinContent(bx,bz,best_me);
+	
+	if(min < minimum_tot + chi_cut)
+	  h2m_1s->SetBinContent(bx,bz,best_me);
+	
+      }
+    }
+    
+  }
+  else if(a1 == 2 && a2 == 3) {
+
+    h2m = new GH2D(Form("msurf%02d",counter),
+		   Form("ME %d Surface;ME %d;ME %d",index,index_y,index_z),
+		   y_bins,yl,yh,z_bins,zl,zh);
+    h2m_1s = new GH2D(Form("msurfc%02d",counter),
+		      Form("Cut ME %d Surface;ME %d;ME %d",index,index_y,index_z),
+		      y_bins,yl,yh,z_bins,zl,zh);
+
+    for(int by=1; by<y_bins+1; by++) {
+      for(int bz=1; bz<z_bins+1; bz++) {
+
+	double min = max;
+	double best_me;
+	for(int bx=1; bx<x_bins+1; bx++) {
+
+	  double chi2 = h3c->GetBinContent(bx,by,bz);
+	  if(chi2 < min && chi2 > 0.0) {
+	    min = chi2;
+	    best_me = h3m->GetBinContent(bx,by,bz);
+	  }
+	  
+	}
+	
+	if(min < max)
+	  h2m->SetBinContent(by,bz,best_me);
+	
+	if(min < minimum_tot + chi_cut)
+	  h2m_1s->SetBinContent(by,bz,best_me);	
+	
+      }
+    }
+    
+  }
+
+  double min = h2m->GetMinimum();
+  if(min < 0.0)
+    h2m->SetMinimum(1.0001*min);
+  else
+    h2m->SetMinimum(0.9999*min);
+  
+  if(min_me < 0.0)
+    h2m_1s->SetMinimum(1.0001*min_me);
+  else
+    h2m_1s->SetMinimum(0.9999*min_me);
+  
+  new GCanvas();
+  h2m->Draw("colz");
+
+  new GCanvas();
+  h2m_1s->Draw("colz");
+  
+  return;
+
+} 
+
+void PlotME3D(const int index = 0, int a1 = 1, int a2 = 2) {
+
+  if(a1 < 1 || a2 < 1 || a2 > 3) {
+    std::cout << "Axes must be 1 (X) 2 (Y) or 3 (Z)" << std::endl;
+    return;
+  }
+
+  if(a1 >= a2) {
+    std::cout << "Axes must obey a1 < a2" << std::endl;
+    return;
+  }
+
+  counter++;
+  gStyle->SetOptStat(0);
+
+  if(index) {
+    MERange(index,a1,a2);
+    return;
+  }
+  
+  double x_bins = x_st*np + 1;
+  double x_sp = 0.0;
+  if(x_bins > 1)
+    x_sp = (x_ul-x_ll)/double(x_bins - 1);
+
+  double y_bins = y_st;
+  double y_sp = 0.0;
+  if(y_bins > 1)
+    y_sp = (y_ul-y_ll)/double(y_bins - 1);
+
+  double z_bins = z_st;
+  double z_sp = 0.0;
+  if(z_bins > 1)
+    z_sp = (z_ul-z_ll)/double(z_bins - 1);
+
+  double xl = x_ll - (x_sp/2.0);
+  double xh = x_ul + (x_sp/2.0);
+  double yl = y_ll - (y_sp/2.0);
+  double yh = y_ul + (y_sp/2.0);
+  double zl = z_ll - (z_sp/2.0);
+  double zh = z_ul + (z_sp/2.0);
+  
+  TH3D* h3 = new TH3D(Form("cube%02d",counter),"Cube",x_bins,xl,xh,y_bins,yl,yh,z_bins,zl,zh);
+  for(int i=0;i<np;i++) {
+
+    std::string name = Form("Piece%i/",i+1) + fname;
+    std::ifstream file;
+    file.open(name.c_str(),std::ios::in);
+
+    if(!(file.is_open())) {
+      std::cout << "FAILED TO OPEN FILE " << name << std::endl;
+      continue;
+    }
+
+    std::string line, word;
+    while(std::getline(file,line)) {
+      
+      std::stringstream ss(line);
+      double x;
+      double y;
+      double z;
+      double c;
+
+      int word_num = 0;
+      while(ss >> word) {
+	
+	std::stringstream ss1(word);
+	if(word_num == 0) {
+	  ss1 >> c;
+	  c *= nd;
+	}
+	else if(word_num == index_x) {
+	  ss1 >> x;
+	}
+	else if(word_num == index_y) {
+	  ss1 >> y;
+	}
+	else if(word_num == index_z) {
+	  ss1 >> z;
+	}
+	word_num++;
+      }
+      h3->Fill(x,y,z,c);
+    }
+  }
+
+  const double max = h3->GetMaximum();
+  int min_bin;
+  double minimum_tot = max;
+
+  for(int bx=1; bx<x_bins+1; bx++) {
+    for(int by=1; by<y_bins+1; by++) {
+      for(int bz=1; bz<z_bins+1; bz++) {
+	
+	if((h3->GetBinContent(bx,by,bz) < minimum_tot) && (h3->GetBinContent(bx,by,bz) > 0.0)) {
+	  minimum_tot = h3->GetBinContent(bx,by,bz);
+	  min_bin = h3->GetBin(bx,by,bz);
+	}
+	
+      }
+    }
+  }  
+  h3->SetMinimum(0.99999*minimum_tot);
+    
+  int binx;
+  int biny;
+  int binz;
+  h3->GetBinXYZ(min_bin,binx,biny,binz);
+
+  double best_x = h3->GetXaxis()->GetBinCenter(binx);
+  double best_y = h3->GetYaxis()->GetBinCenter(biny);
+  double best_z = h3->GetZaxis()->GetBinCenter(binz);
+
+  double min_x = best_x;
+  double min_y = best_y;
+  double min_z = best_z;
+  double max_x = best_x;
+  double max_y = best_y;
+  double max_z = best_z;
+  
+  for(int i=1; i<x_bins+1; i++) {
+    for(int j=1; j<y_bins+1; j++) {
+      for(int k=1; k<z_bins+1; k++) {
+			  
+	if(h3->GetBinContent(i,j,k) < minimum_tot+chi_cut && h3->GetBinContent(i,j,k) > 0.0) {
+
+	  double x = h3->GetXaxis()->GetBinCenter(i);
+	  if(x < min_x)
+	    min_x = x;
+	  if(x > max_x)
+	    max_x = x;
+	  
+	  double y = h3->GetYaxis()->GetBinCenter(j);
+	  if(y < min_y)
+	    min_y = y;
+	  if(y > max_y)
+	    max_y = y;
+
+	  double z = h3->GetZaxis()->GetBinCenter(k);
+	  if(z < min_z)
+	    min_z = z;
+	  if(z > max_z)
+	    max_z = z;
+	  
+	}
+      }
+    }
+  }
+
+  double xerr_up = max_x - best_x;
+  double xerr_dn = best_x - min_x;
+  double yerr_up = max_y - best_y;
+  double yerr_dn = best_y - min_y;
+  double zerr_up = max_z - best_z;
+  double zerr_dn = best_z - min_z;
+  
+  std::cout << "\nChi2 Surface:\n Minimum at binx=" << binx << ", biny=" << biny << ", binz="
+	    << binz << " (Chi2 = " << minimum_tot << ")\n"
+    
+	    << "  ME " << index_x << " (X) Range: " << best_x << " + " << xerr_up << " - "
+	    << xerr_dn << " (" << min_x << "," << max_x << ")\n"
+    
+	    << "  ME " << index_y << " (Y) Range: " << best_y << " + " << yerr_up << " - "
+	    << yerr_dn << " (" << min_y << "," << max_y << ")\n"
+    
+	    << "  ME " << index_z << " (Z) Range: " << best_z << " + " << zerr_up << " - "
+	    << zerr_dn << " (" << min_z << "," << max_z << ")\n"
+	    << std::endl;
+  
+  GH2D* h2;
+  GH2D* h2_1s;
+  
+  if(a1 == 1 && a2 == 2) {
+    
+    h2 = new GH2D(Form("surf%02d",counter),Form("Chi2 Surface;ME %d;ME %d",index_x,index_y),
+		  x_bins,xl,xh,y_bins,yl,yh);
+    h2_1s = new GH2D(Form("surfc%02d",counter)
+		     ,Form("Cut Chi2 Surface;ME %d;ME %d",index_x,index_y),
+		     x_bins,xl,xh,y_bins,yl,yh);
+
+    for(int bx=1; bx<x_bins+1; bx++) {
+      for(int by=1; by<y_bins+1; by++) {
+
+	double min = max;
+	double best_z;
+	for(int bz=1; bz<z_bins+1; bz++)
+	  if((h3->GetBinContent(bx,by,bz) < min) && (h3->GetBinContent(bx,by,bz) > 0.0))
+	    min = h3->GetBinContent(bx,by,bz);
+	
+	if(min < max)
+	  h2->SetBinContent(bx,by,min);
+
+	if(min < minimum_tot + chi_cut)
+	  h2_1s->SetBinContent(bx,by,min);
+	
+      }
+    }
+    
+  }
+  else if(a1 == 1 && a2 == 3) {
+    
+    h2 = new GH2D(Form("surf%02d",counter),Form("Chi2 Surface;ME %d;ME %d",index_x,index_z),
+		  x_bins,xl,xh,z_bins,zl,zh);
+    h2_1s = new GH2D(Form("surfc%02d",counter),
+		     Form("Cut Chi2 Surface;ME %d;ME %d",index_x,index_z),
+		     x_bins,xl,xh,z_bins,zl,zh);
+
+    for(int bx=1; bx<x_bins+1; bx++) {
+      for(int bz=1; bz<z_bins+1; bz++) {
+
+	double min = max;
+	double best_y;
+	for(int by=1; by<y_bins+1; by++)
+	  if((h3->GetBinContent(bx,by,bz) < min) && (h3->GetBinContent(bx,by,bz) > 0.0))
+	    min = h3->GetBinContent(bx,by,bz);
+	
+	if(min < max)
+	  h2->SetBinContent(bx,bz,min);
+	
+	if(min < minimum_tot + chi_cut)
+	  h2_1s->SetBinContent(bx,bz,min);
+      }
+    }
+    
+  }
+  else if(a1 == 2 && a2 == 3) {
+    
+    h2 = new GH2D(Form("surf%02d",counter),Form("Chi2 Surface;ME %d;ME %d",index_y,index_z),
+		  y_bins,yl,yh,z_bins,zl,zh);
+    h2_1s = new GH2D(Form("surfc%02d",counter),
+		     Form("Cut Chi2 Surface;ME %d;ME %d",index_y,index_z),
+		     y_bins,yl,yh,z_bins,zl,zh);
+
+    for(int by=1; by<y_bins+1; by++) {
+      for(int bz=1; bz<z_bins+1; bz++) {
+
+	double min = max;
+	double best_x;
+	for(int bx=1; bx<x_bins+1; bx++)
+	  if((h3->GetBinContent(bx,by,bz) < min) && (h3->GetBinContent(bx,by,bz) > 0.0))
+	    min = h3->GetBinContent(bx,by,bz);
+	
+	if(min < max)
+	  h2->SetBinContent(by,bz,min);
+	
+	if(min < minimum_tot + chi_cut)
+	  h2_1s->SetBinContent(by,bz,min);
+	
+      }
+    }
+    
+  }
+
+  new GCanvas();
+  h2->SetMinimum(0.99999*minimum_tot);
+  h2->Draw("colz");
+  
+  new GCanvas();
+  h2_1s->SetMinimum(0.99999*minimum_tot);
+  h2_1s->Draw("colz");
+
+  return;
+
+}
+
+TGraph* PlotCurve(int index, int axis) {
+
+  if(axis < 1 || axis > 3) {
+    std::cout << "Axis must be 1 (x) 2 (y) or 3 (z)" << std::endl;
+    return NULL;
+  }
+
+  if((axis == 1 && index == index_x) || (axis == 2 && index == index_y)
+     || (axis == 3 && index == index_z)) {
+    std::cout << "Index and axis should be different" << std::endl;
+    return NULL;
+  }
+
+  double x_bins = x_st*np + 1;
+  double x_sp = 0.0;
+  if(x_bins > 1)
+    x_sp = (x_ul-x_ll)/double(x_bins - 1);
+
+  double y_bins = y_st;
+  double y_sp = 0.0;
+  if(y_bins > 1)
+    y_sp = (y_ul-y_ll)/double(y_bins - 1);
+
+  double z_bins = z_st;
+  double z_sp = 0.0;
+  if(z_bins > 1)
+    z_sp = (z_ul-z_ll)/double(z_bins - 1);
+
+  double xl = x_ll - (x_sp/2.0);
+  double xh = x_ul + (x_sp/2.0);
+  double yl = y_ll - (y_sp/2.0);
+  double yh = y_ul + (y_sp/2.0);
+  double zl = z_ll - (z_sp/2.0);
+  double zh = z_ul + (z_sp/2.0);
+
+  counter++;
+  TH3D* h3c = new TH3D(Form("cubec%02d",counter),"CubeC",x_bins,xl,xh,y_bins,yl,yh,z_bins,zl,zh);
+  TH3D* h3m = new TH3D(Form("cubem%02d",counter),"CubeM",x_bins,xl,xh,y_bins,yl,yh,z_bins,zl,zh);
+  for(int i=0;i<np;i++) {
+
+    std::string name = Form("Piece%i/",i+1) + fname;
+    std::ifstream file;
+    file.open(name.c_str(),std::ios::in);
+
+    if(!(file.is_open())) {
+      std::cout << "FAILED TO OPEN FILE " << name << std::endl;
+      continue;
+    }
+
+    std::string line, word;
+    while(std::getline(file,line)) {
+      
+      std::stringstream ss(line);
+      double x;
+      double y;
+      double z;
+      double c;
+      double v;
+
+      int word_num = 0;
+      while(ss >> word) {
+	
+	std::stringstream ss1(word);
+	if(!word_num) {
+	  ss1 >> c;
+	  c *= nd;
+	}
+	else if(word_num == index_x) {
+	  ss1 >> x;
+	}
+	else if(word_num == index_y) {
+	  ss1 >> y;
+	}
+	else if(word_num == index_z) {
+	  ss1 >> z;
+	}
+	else if(word_num == index) {
+	  ss1 >> v;
+	}
+	word_num++;
+      }
+
+      h3c->Fill(x,y,z,c);
+      if(index == index_x)
+	h3m->Fill(x,y,z,x);
+      else if(index == index_y)
+	h3m->Fill(x,y,z,y);
+      else if(index == index_z)
+	h3m->Fill(x,y,z,z);
+      else if(index)
+	h3m->Fill(x,y,z,v);
+    }
+  }
+
+  TGraph* gc = new TGraph();
+  gc->GetYaxis()->SetTitle("Chi2");
+  gc->SetMarkerStyle(20);
+
+  TGraph* gv = new TGraph();
+  gv->GetYaxis()->SetTitle(Form("ME %d",index));
+  gv->SetMarkerStyle(20);
+
+  const double max = h3c->GetMaximum();
+  if(axis == 1) {
+    gc->GetXaxis()->SetTitle(Form("ME %d",index_x));
+    gv->GetXaxis()->SetTitle(Form("ME %d",index_x));
+    
+    for(int i=1; i<x_bins+1; i++) {
+
+      double x = h3c->GetXaxis()->GetBinCenter(i);
+
+      bool good = false;
+      double min_chi2 = max;
+      double best_me;
+      
+      for(int j=1; j<y_bins+1; j++) {
+      
+	double y = h3c->GetYaxis()->GetBinCenter(j);
+	for(int k=1; k<z_bins+1; k++) {
+		
+	  double z = h3c->GetZaxis()->GetBinCenter(k);
+
+	  double chi2 = h3c->GetBinContent(i,j,k);
+	  double me = h3m->GetBinContent(i,j,k);
+
+	  if(chi2 < min_chi2 && chi2 > 0.0) {
+	    min_chi2 = chi2;
+	    best_me = me;
+	    good = true;
+	  }
+	
+	}
+      }
+      
+      if(good) {
+	gc->SetPoint(i-1,x,min_chi2);
+	if(index)
+	  gv->SetPoint(i-1,x,best_me);
+      }
+      
+    }
+  }
+  else if(axis == 2) {
+    gc->GetXaxis()->SetTitle(Form("ME %d",index_y));
+    gv->GetXaxis()->SetTitle(Form("ME %d",index_y));
+    
+    for(int j=1; j<y_bins+1; j++) {
+
+      double y = h3c->GetYaxis()->GetBinCenter(j);
+
+      bool good = false;
+      double min_chi2 = max;
+      double best_me;
+      
+      for(int i=1; i<x_bins+1; i++) {
+      
+	double x = h3c->GetXaxis()->GetBinCenter(i);
+	for(int k=1; k<z_bins+1; k++) {
+		
+	  double z = h3c->GetZaxis()->GetBinCenter(k);
+
+	  double chi2 = h3c->GetBinContent(i,j,k);
+	  double me = h3m->GetBinContent(i,j,k);
+
+	  if(chi2 < min_chi2 && chi2 > 0.0) {
+	    min_chi2 = chi2;
+	    best_me = me;
+	    good = true;
+	  }
+	
+	}
+      }
+
+      if(good) {
+	gc->SetPoint(j-1,y,min_chi2);
+	if(index)
+	  gv->SetPoint(j-1,y,best_me);
+      }
+    }
+  }
+  else if(axis == 3) {
+    gc->GetXaxis()->SetTitle(Form("ME %d",index_z));
+    gv->GetXaxis()->SetTitle(Form("ME %d",index_z));
+  
+    for(int k=1; k<z_bins+1; k++) {
+
+      double z = h3c->GetZaxis()->GetBinCenter(k);
+
+      bool good = false;
+      double min_chi2 = max;
+      double best_me;
+      
+      for(int i=1; i<x_bins+1; i++) {
+      
+	double x = h3c->GetXaxis()->GetBinCenter(i);
+	for(int j=1; j<y_bins+1; j++) {
+		
+	  double y = h3c->GetYaxis()->GetBinCenter(j);
+
+	  double chi2 = h3c->GetBinContent(i,j,k);
+	  double me = h3m->GetBinContent(i,j,k);
+
+	  if(chi2 < min_chi2 && chi2 > 0.0) {
+	    min_chi2 = chi2;
+	    best_me = me;
+	    good = true;
+	  }
+	
+	}
+      }
+
+      if(good) {
+	gc->SetPoint(k-1,z,min_chi2);
+	if(index)
+	  gv->SetPoint(k-1,z,best_me);
+      }
+    }
+  }
+
+  new GCanvas();
+
+  if(index) {
+    gv->Draw("APL");
+    return gv;
+  }
+
+  gc->Draw("APL");
+  return gc;
+  
+}

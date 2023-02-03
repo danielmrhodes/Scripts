@@ -3,10 +3,10 @@ void WriteME() {
   const int index = 4; //Change this accordingly
   
   std::ifstream litfile;
-  litfile.open("ge80.bst.bak",std::ios::in);
+  litfile.open("kr80.bst.bak",std::ios::in);
 
   std::ofstream mefile;
-  mefile.open("ge80.bst",std::ios::out);
+  mefile.open("kr80.bst",std::ios::out);
 
   std::ifstream list;
   list.open("list.txt",std::ios::in);

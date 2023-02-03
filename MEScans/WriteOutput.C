@@ -1,9 +1,9 @@
 double ReadChiSqFromFile() {
 
   ifstream g2out;
-  g2out.open("ge80.out",std::ios::in);	
+  g2out.open("kr80.out",std::ios::in);	
   if( !g2out.is_open() ) {	
-    std::cout << "Unable to open ge80.out" << std::endl;
+    std::cout << "Unable to open kr80.out" << std::endl;
     return 999;
   }
   
@@ -28,7 +28,7 @@ double ReadChiSqFromFile() {
   g2out.close();
 	
   if(!flag) {
-    std::cout << "Couldn't find chisq value in ge80.out" << std::endl;
+    std::cout << "Couldn't find chisq value in kr80.out" << std::endl;
   }
 	
   return chisq;
@@ -59,7 +59,7 @@ void WriteOutput() {
   outfile.open("output.txt",std::ios::app);
 
   std::ifstream mefile;
-  mefile.open("ge80.bst",std::ios::in);
+  mefile.open("kr80.bst",std::ios::in);
 
   double chi2 = ReadChiSqFromFile();
   

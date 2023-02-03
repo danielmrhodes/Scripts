@@ -1,0 +1,428 @@
+1
+ *****************************************************************************************************************************
+ *****************************************************************************************************************************
+ **************************************************                         **************************************************
+ **************************************************          GOSIA          **************************************************
+ **************************************************                         **************************************************
+ *****************************************************************************************************************************
+ *****************************************************************************************************************************
+
+
+
+
+
+                    ROCHESTER COULOMB EXCITATION DATA ANALYSIS CODE BY T.CZOSNYKA,D.CLINE AND C.Y.WU
+                                                  VERSION: 20081208.18
+
+
+
+
+
+
+               Coulomb excitation of 80Kr on a 196Pt target                               
+          ----------------------------------------------------------------------------------------------------
+
+                                        LEVELS
+
+     INDEX     PARITY         SPIN           ENERGY(MEV)
+       1           +           0.0            0.0000
+       2           +           2.0            0.6166
+       3           +           2.0            1.2562
+       4           +           0.0            1.3205
+       5           +           4.0            1.4361
+       6           +           3.0            1.7880
+       7           +           4.0            2.1459
+       8           +           6.0            2.3921
+       9           +           8.0            3.4100
+      10           +           2.0            2.3205
+      11           +           6.0            3.1102
+
+                                        MATRIX ELEMENTS
+
+
+     MULTIPOLARITY=2
+    INDEX   NF     NS          ME               LIMITS
+       1      1      2        0.64500     FIXED
+       2      1      3        0.07800     FIXED
+       3      2      2       -0.43000     FIXED
+       4      2      3        0.73000     FIXED
+       5      2      4        0.33000       -1.00000        1.00000
+       6      2      5        1.06900       -2.00000        2.00000
+       7      2      6        0.09000     FIXED
+       8      2      7        0.06900     FIXED
+       9      3      3        0.40000     FIXED
+      10      3      4       -0.08000       -1.00000        1.00000
+      11      3      6        0.69800     FIXED
+      12      3      7        0.96000     FIXED
+      13      4     10        0.10000     FIXED
+      14      5      5       -0.77000       -2.00000        2.00000
+      15      5      6        0.84700     FIXED
+      16      5      7        0.76800     FIXED
+      17      5      8        1.68000     FIXED
+      18      6      6        0.00000     FIXED
+      19      7      7        0.00000     FIXED
+      20      7     11        0.10000     FIXED
+      21      8      8       -0.90000     FIXED
+      22      8      9        1.77300     FIXED
+      23      9      9       -1.10000     FIXED
+      24     10     10        0.00000     FIXED
+      25     11     11        0.00000     FIXED
+     MULTIPOLARITY=7
+    INDEX   NF     NS          ME               LIMITS
+      26      2      3        0.06500     FIXED
+      27      2      6        0.06800     FIXED
+      28      3      6        0.10400     FIXED
+      29      5      6        0.03500     FIXED
+      30      5      7        0.22000     FIXED
+
+                                               REPRINT OF EXPERIMENTAL DATA TO BE FITTED
+
+
+
+
+
+     EXPERIMENT  1
+  PROJECTILE ( 36., 80.) 267.940 MEV ---1 GE(LI) DETECTOR(S)  WEIGHT=0.10E+01
+                    ** EXPERIMENTAL YIELDS **
+    DECAY IS  IF         YIELD+/-ERROR
+
+      11   5   2  0.165033E+03     0.589587E+02
+      16   2   1  0.211328E+05     0.653135E+03
+
+
+
+     EXPERIMENT  2
+  PROJECTILE ( 36., 80.) 267.940 MEV ---1 GE(LI) DETECTOR(S)  WEIGHT=0.10E+01
+                    ** EXPERIMENTAL YIELDS **
+    DECAY IS  IF         YIELD+/-ERROR
+
+      11   5   2  0.711245E+03     0.132776E+03
+      14   3   1  0.444716E+02     0.444672E+02
+      15   3   2  0.112486E+03     0.562372E+02
+      16   2   1  0.243220E+05     0.738337E+03
+
+
+
+     EXPERIMENT  3
+  PROJECTILE ( 36., 80.) 267.940 MEV ---1 GE(LI) DETECTOR(S)  WEIGHT=0.10E+01
+                    ** EXPERIMENTAL YIELDS **
+    DECAY IS  IF         YIELD+/-ERROR
+
+      11   5   2  0.749953E+03     0.128098E+03
+      14   3   1  0.106408E+03     0.639072E+02
+      15   3   2  0.202266E+03     0.101123E+03
+      16   2   1  0.228903E+05     0.720634E+03
+
+
+
+     EXPERIMENT  4
+  PROJECTILE ( 36., 80.) 267.940 MEV ---1 GE(LI) DETECTOR(S)  WEIGHT=0.10E+01
+                    ** EXPERIMENTAL YIELDS **
+    DECAY IS  IF         YIELD+/-ERROR
+
+      11   5   2  0.204885E+04     0.198585E+03
+      14   3   1  0.174051E+03     0.774411E+02
+      15   3   2  0.612753E+03     0.171809E+03
+      16   2   1  0.254452E+05     0.705934E+03
+
+
+
+     EXPERIMENT  5
+  PROJECTILE ( 36., 80.) 267.940 MEV ---1 GE(LI) DETECTOR(S)  WEIGHT=0.10E+01
+                    ** EXPERIMENTAL YIELDS **
+    DECAY IS  IF         YIELD+/-ERROR
+
+       6   7   3  0.765805E+02     0.340324E+02
+      11   5   2  0.135954E+04     0.142182E+03
+      14   3   1  0.174744E+03     0.546761E+02
+   15016   3   2  0.129292E+05     0.439459E+03
+
+
+
+     EXPERIMENT  6
+  PROJECTILE ( 36., 80.) 267.940 MEV ---1 GE(LI) DETECTOR(S)  WEIGHT=0.10E+01
+                    ** EXPERIMENTAL YIELDS **
+    DECAY IS  IF         YIELD+/-ERROR
+
+      11   5   2  0.102565E+03     0.256852E+02
+      12   4   2  0.668986E+02     0.201135E+02
+      14   3   1  0.421770E+02     0.175688E+02
+      15   3   2  0.778230E+02     0.222655E+02
+      16   2   1  0.949950E+03     0.708490E+02
+
+
+       23 EXPERIMENTAL YIELDS            4 MATRIX ELEMENTS TO BE VARIED
+
+
+
+                                        BRANCHING RATIOS
+
+     NS1     NF1     NS2     NF2     RATIO(1:2)         ERROR
+      3       1       3       2        0.32300       -0.02600      0.02600
+      6       5       6       2        0.12000       -0.02100      0.02100
+      6       3       6       2        0.82000       -0.05100      0.05100
+      7       5       7       3        0.27000       -0.04100      0.04100
+      7       2       7       3        0.07700       -0.02620      0.02620
+     BRANCHING RATIOS ARE TAKEN WITH WEIGHT    0.100000E+01
+
+
+
+                              LIFETIMES(PSEC)
+
+
+     LEVEL         LIFETIME     ERROR
+
+        6           10.24   **********   **********
+        7            1.10   **********   **********
+        8            0.81   **********   **********
+        9            0.40   **********   **********
+
+          LIFETIMES ARE TAKEN WITH WEIGHT    0.000000E+00
+
+
+                    EXPERIMENTAL E2/M1 MIXING RATIOS
+
+
+          TRANSITION            DELTA          ERROR
+
+           3---  2                6.0000          -1.0000      1.0000
+           6---  5                7.0000          -1.0000      1.0000
+           6---  3                3.0000          -0.4000      0.4000
+           6---  2                1.3000          -0.3000      0.3000
+           7---  5                2.0000          -0.8000      0.8000
+
+          E2/M1 MIXING RATIOS ARE TAKEN WITH WEIGHT    0.100000E+01
+
+
+                              EXPERIMENTAL MATRIX ELEMENT(S)
+
+
+          TRANSITION          MAT.EL.          ERROR
+
+           1---  2                0.6220          -0.0100      0.0100
+
+           MATRIX ELEMENT(S) ARE TAKEN WITH WEIGHT    0.100000E+01
+
+
+
+     *****  RESTART-MATRIX ELEMENTS OVERWRITTEN  *****
+
+
+
+
+                                        MATRIX ELEMENTS
+
+
+     MULTIPOLARITY=2
+    INDEX   NF     NS          ME               LIMITS
+       1      1      2        0.62361     FIXED
+       2      1      3        0.08500     FIXED
+       3      2      2       -0.23000     FIXED
+       4      2      3        0.75800     FIXED
+       5      2      4        0.44661       -1.00000        1.00000
+       6      2      5        1.10825       -2.00000        2.00000
+       7      2      6        0.09110     FIXED
+       8      2      7        0.06810     FIXED
+       9      3      3       -0.10700     FIXED
+      10      3      4        0.08621       -1.00000        1.00000
+      11      3      6        0.71104     FIXED
+      12      3      7        0.95257     FIXED
+      13      4     10        0.17517     FIXED
+      14      5      5       -0.55804       -2.00000        2.00000
+      15      5      6        0.80202     FIXED
+      16      5      7        0.78255     FIXED
+      17      5      8        1.73601     FIXED
+      18      6      6       -0.00001     FIXED
+      19      7      7        0.86577     FIXED
+      20      7     11        0.10202     FIXED
+      21      8      8       -0.85624     FIXED
+      22      8      9        1.91231     FIXED
+      23      9      9       -1.20510     FIXED
+      24     10     10        0.00074     FIXED
+      25     11     11        0.00001     FIXED
+     MULTIPOLARITY=7
+    INDEX   NF     NS          ME               LIMITS
+      26      2      3        0.06939     FIXED
+      27      2      6        0.06848     FIXED
+      28      3      6        0.10509     FIXED
+      29      5      6        0.03364     FIXED
+      30      5      7        0.23057     FIXED
+     *** CHISQ=  0.399102E+00 ***
+
+     MATRIX ELEMENT   5 LOCKED!
+
+     MATRIX ELEMENT  10 LOCKED!
+     MINIMIZATION STOPPED-NUMBER OF STEPS NPTL=    6 EXCEEDED
+     *** CHISQ=  0.360060E+00 ***
+
+
+                    NORMALIZATION CONSTANTS
+
+  EXPERIMENT     DETECTORS(1-32)
+  1  0.5901E+05
+  2  0.2261E+05
+  3  0.1114E+05
+  4  0.6590E+04
+  5  0.2336E+04
+  6  0.1507E+03
+
+
+                    RECOMMENDED RELATIVE GE(LI) EFFICIENCIES
+
+  EXPERIMENT
+  1  0.1000E+01
+  2  0.1000E+01
+  3  0.1000E+01
+  4  0.1000E+01
+  5  0.1000E+01
+  6  0.1000E+01
+
+
+     CALCULATED AND EXPERIMENTAL YIELDS   EXPERIMENT  1 DETECTOR  1
+
+      NI     NF       II        IF         ENERGY(MEV)      YCAL        YEXP       PC. DIFF.  (YE-YC)/SIGMA
+       5      2        4.0       2.0         0.8195      .1279E+03      .1650E+03     22.5      0.6              
+       2      1        2.0       0.0         0.6166      .2133E+05      .2113E+05     -0.9     -0.3              
+
+                                                  CHISQ SUBTOTAL =   0.487813E+00
+
+
+     CALCULATED AND EXPERIMENTAL YIELDS   EXPERIMENT  2 DETECTOR  1
+
+      NI     NF       II        IF         ENERGY(MEV)      YCAL        YEXP       PC. DIFF.  (YE-YC)/SIGMA
+       5      2        4.0       2.0         0.8195      .4764E+03      .7112E+03     33.0      1.8              
+       3      1        2.0       0.0         1.2562      .4621E+02      .4447E+02     -3.9     -0.0              
+       3      2        2.0       2.0         0.6396      .1334E+03      .1125E+03    -18.6     -0.4              
+       2      1        2.0       0.0         0.6166      .2409E+05      .2432E+05      1.0      0.3              
+
+                                                  CHISQ SUBTOTAL =   0.337064E+01
+
+
+     CALCULATED AND EXPERIMENTAL YIELDS   EXPERIMENT  3 DETECTOR  1
+
+      NI     NF       II        IF         ENERGY(MEV)      YCAL        YEXP       PC. DIFF.  (YE-YC)/SIGMA
+       5      2        4.0       2.0         0.8195      .8301E+03      .7500E+03    -10.7     -0.6              
+       3      1        2.0       0.0         1.2562      .7627E+02      .1064E+03     28.3      0.5              
+       3      2        2.0       2.0         0.6396      .2208E+03      .2023E+03     -9.1     -0.2              
+       2      1        2.0       0.0         0.6166      .2175E+05      .2289E+05      5.0      1.6              
+
+                                                  CHISQ SUBTOTAL =   0.316928E+01
+
+
+     CALCULATED AND EXPERIMENTAL YIELDS   EXPERIMENT  4 DETECTOR  1
+
+      NI     NF       II        IF         ENERGY(MEV)      YCAL        YEXP       PC. DIFF.  (YE-YC)/SIGMA
+       5      2        4.0       2.0         0.8195      .2026E+04      .2049E+04      1.1      0.1              
+       3      1        2.0       0.0         1.2562      .2134E+03      .1741E+03    -22.6     -0.5              
+       3      2        2.0       2.0         0.6396      .6206E+03      .6128E+03     -1.3     -0.0              
+       2      1        2.0       0.0         0.6166      .2555E+05      .2545E+05     -0.4     -0.1              
+
+                                                  CHISQ SUBTOTAL =   0.295119E+00
+
+
+     CALCULATED AND EXPERIMENTAL YIELDS   EXPERIMENT  5 DETECTOR  1
+
+      NI     NF       II        IF         ENERGY(MEV)      YCAL        YEXP       PC. DIFF.  (YE-YC)/SIGMA
+       7      3        4.0       2.0         0.8896      .7954E+02      .7658E+02     -3.9     -0.1              
+       5      2        4.0       2.0         0.8195      .1400E+04      .1360E+04     -3.0     -0.3              
+       3      1        2.0       0.0         1.2562      .2141E+03      .1747E+03    -22.5     -0.7              
+     3+ 2-- 2+ 1    2.0+ 2.0-- 2.0+ 0.0   0.6396+0.6166  .1357E+05      .1293E+05     -4.9     -1.5              
+
+                                                  CHISQ SUBTOTAL =   0.271593E+01
+
+
+     CALCULATED AND EXPERIMENTAL YIELDS   EXPERIMENT  6 DETECTOR  1
+
+      NI     NF       II        IF         ENERGY(MEV)      YCAL        YEXP       PC. DIFF.  (YE-YC)/SIGMA
+       5      2        4.0       2.0         0.8195      .9441E+02      .1026E+03      8.0      0.3              
+       4      2        0.0       2.0         0.7039      .4959E+02      .6690E+02     25.9      0.9              
+       3      1        2.0       0.0         1.2562      .2498E+02      .4218E+02     40.8      1.0              
+       3      2        2.0       2.0         0.6396      .7177E+02      .7782E+02      7.8      0.3              
+       2      1        2.0       0.0         0.6166      .9524E+03      .9499E+03     -0.3     -0.0              
+
+                                                  CHISQ SUBTOTAL =   0.187572E+01
+
+
+
+          EXP. AND CALCULATED BRANCHING RATIOS
+
+     NS1     NF1     NS2     NF2     RATIO(1:2)         ERROR       CALC.RATIO     (EXP-CAL)/ERROR
+
+
+      3       1       3       2        0.32300       -0.02600        0.02600        0.35695          -1.3
+      6       5       6       2        0.12000       -0.02100        0.02100        0.12163          -0.1
+      6       3       6       2        0.82000       -0.05100        0.05100        0.81995           0.0
+      7       5       7       3        0.27000       -0.04100        0.04100        0.27214          -0.1
+      7       2       7       3        0.07700       -0.02620        0.02620        0.07670           0.0
+
+
+          E2/M1 MIXING RATIOS
+          TRANSITION          EXP.DELTA          CALC.DELTA          SIGMA
+
+           3---  2                6.00               5.83             -0.17
+           6---  5                7.00               7.00              0.00
+           6---  3                3.00               3.00              0.01
+           6---  2                1.30               1.30              0.00
+           7---  5                2.00               2.01              0.01
+
+
+                    CALCULATED LIFETIMES
+
+     LEVEL     LIFETIME(PSEC)     EXP        ERROR
+
+        2       0.1175E+02
+        3       0.4743E+01
+        4       0.3938E+01
+        5       0.1634E+01
+        6       0.1009E+02     0.1024E+02    -.1300E+11    0.1300E+11
+        7       0.1076E+01     0.1100E+01    -.6100E+10    0.6100E+10
+        8       0.4407E+00     0.8080E+00    -.2020E+10    0.2020E+10
+        9       0.3470E+00     0.4040E+00    -.3030E+10    0.3030E+10
+       10       0.1329E+02
+       11       0.1222E+03
+
+
+CALCULATED AND EXPERIMENTAL MATRIX ELEMENTS
+
+
+     NI NF  EXP. ME   CURRENT ME   SIGMA
+      1   2    0.6220    0.6236    0.1611
+
+                                        MATRIX ELEMENTS
+
+
+     MULTIPOLARITY=2
+    INDEX   NF     NS          ME          PC CHANGE     RED. TRANS. PROB.
+       1      1      2        0.62361        0.00000        0.07778*?*
+       2      1      3        0.08500        0.00000        0.00145*?*
+       3      2      2       -0.23000       -0.00000     ***********?*
+       4      2      3        0.75800        0.00000        0.11491*?*
+       5      2      4        0.34610      -22.50520        0.11979   
+       6      2      5        1.10236       -0.53184        0.13502   
+       7      2      6        0.09110        0.00000        0.00119*?*
+       8      2      7        0.06810        0.00000        0.00052*?*
+       9      3      3       -0.10700       -0.00000     ***********?*
+      10      3      4        0.16799       94.85621        0.02822   
+      11      3      6        0.71104        0.00000        0.07223*?*
+      12      3      7        0.95257        0.00000        0.10082*?*
+      13      4     10        0.17517        0.00000        0.00614*?*
+      14      5      5       -0.53880       -3.44684     **********   
+      15      5      6        0.80202        0.00000        0.09189*?*
+      16      5      7        0.78255        0.00000        0.06804*?*
+      17      5      8        1.73601        0.00000        0.23182*?*
+      18      6      6       -0.00001       -0.00000     ***********?*
+      19      7      7        0.86577        0.00000     ***********?*
+      20      7     11        0.10202        0.00000        0.00080*?*
+      21      8      8       -0.85624       -0.00000     ***********?*
+      22      8      9        1.91231        0.00000        0.21511*?*
+      23      9      9       -1.20510       -0.00000     ***********?*
+      24     10     10        0.00074        0.00000     ***********?*
+      25     11     11        0.00001        0.00000     ***********?*
+     MULTIPOLARITY=7
+    INDEX   NF     NS          ME          PC CHANGE     RED. TRANS. PROB.
+      26      2      3        0.06939        0.00000        0.00096*?*
+      27      2      6        0.06848        0.00000        0.00067*?*
+      28      3      6        0.10509        0.00000        0.00158*?*
+      29      5      6        0.03364        0.00000        0.00016*?*
+      30      5      7        0.23057        0.00000        0.00591*?*
+               ********* END OF EXECUTION **********
