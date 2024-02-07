@@ -1,0 +1,242 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+#pidof gnome-screensaver > /dev/null 2>&1
+#if [ $? -eq 1 ]; then
+#	gnome-screensaver&
+#fi
+
+source /opt/root_v6.20.08-bld/bin/thisroot.sh
+source /opt/GRSISort/thisgrsi.sh
+source /opt/jRootAnalysisTools-3.0/bin/thisjlib.sh
+#source /opt/GRUTinizer/thisgrut.sh
+source /opt/geant4_v11.0.0/share/Geant4-11.0.0/geant4make/geant4make.sh 
+source /opt/geant4_v11.0.0/bin/geant4.sh
+source /home/drhodes/.git-completion.bash
+
+export ROOTSYS=/opt/root_v6.20.08
+export ROOTINC=$ROOTSYS/include
+export ROOTLIB=$ROOTSYS/lib
+
+PATH=$PATH:/opt/GOSIA
+PATH=$PATH:$ROOTSYS/bin
+PATH=$PATH:/opt/chisqsurface/bin
+export PATH
+
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ROOTLIB
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/Cygnus/bin
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/drhodes/Analysis/78Kr/data/Orig/GRSISort_Old/bin
+export LD_LIBRARY_PATH
+
+# User specific aliases and functions
+
+alias cp='cp -ip'
+alias mv='mv -i'
+alias rm='rm -i'
+alias ls='ls -h --color'
+alias lt='ls -ltr'
+
+alias l='ls'
+alias ll='ls -l'
+alias lll='ls -al'
+alias sl='ls | more'
+alias clr='clear'
+alias h='history|tail -32'
+alias m='more'
+alias c='cat'
+
+alias grsisort='grsisort -l /opt/jRootAnalysisTools-3.0/bin/root_start.C'
+alias daq='ssh -X tigdaq@grsmid02'
+alias ln2='ssh -X tigress@lnfillserv'
+alias gn2='ssh -X tigln08@lnfillserv'
+
+alias hv0='telnet tighv00.triumf.ca 1527'
+alias hv1='telnet tighv01.triumf.ca 1527'
+alias hv4='ssh -X admin@tighv04.triumf.ca -oHostKeyAlgorithms=+ssh-dss'
+alias hv5='ssh -X admin@tighv05.triumf.ca -oHostKeyAlgorithms=+ssh-dss'
+alias hv7='ssh -X admin@tighv07.triumf.ca -oHostKeyAlgorithms=+ssh-dss'
+alias lhv='ssh -X admin@tighv08.triumf.ca -oHostKeyAlgorithms=+ssh-dss'
+
+function load_root_28.06() {
+
+  export ROOTSYS=/opt/root_v6.28.06
+  export ROOTINC=$ROOTSYS/include
+  export ROOTLIB=$ROOTSYS/lib
+  source /opt/root_v6.28.06-bld/bin/thisroot.sh
+
+}
+
+function load_geant4_10.6() {
+
+  export G4INSTALL=/opt/geant4_v10.06.03
+  source /opt/geant4_v10.06.03/share/Geant4-10.6.3/geant4make/geant4make.sh
+  source /opt/geant4_v10.06.03/bin/geant4.sh
+
+}
+
+function load_geant4_10.7() {
+
+  export G4INSTALL=/opt/geant4_v10.07.03
+  source /opt/geant4_v10.07.03/share/Geant4-10.7.3/geant4make/geant4make.sh
+  source /opt/geant4_v10.07.03/bin/geant4.sh
+
+}
+
+function load_geant4_11() {
+  
+  export G4INSTALL=/opt/geant4_v11.0.0
+  source /opt/geant4_v11.0.0/share/Geant4-11.0.0/geant4make/geant4make.sh
+  source /opt/geant4_v11.0.0/bin/geant4.sh
+
+}
+
+# Normal Colors
+Black='\e[0;30m'        # Black
+Red='\e[0;31m'          # Red
+Green='\e[0;32m'        # Green
+Yellow='\e[0;33m'       # Yellow
+Blue='\e[0;34m'         # Blue
+Purple='\e[0;35m'       # Purple
+Cyan='\e[0;36m'         # Cyan
+White='\e[0;37m'        # White
+
+# Bold
+BBlack='\e[1;30m'       # Black
+BRed='\e[1;31m'         # Red
+BGreen='\e[1;32m'       # Green
+BYellow='\e[1;33m'      # Yellow
+BBlue='\e[1;34m'        # Blue
+BPurple='\e[1;35m'      # Purple
+BCyan='\e[1;36m'        # Cyan
+BWhite='\e[1;37m'       # White
+
+# Background
+On_Black='\e[40m'       # Black
+On_Red='\e[41m'         # Red
+On_Green='\e[42m'       # Green
+On_Yellow='\e[43m'      # Yellow
+On_Blue='\e[44m'        # Blue
+On_Purple='\e[45m'      # Purple
+On_Cyan='\e[46m'        # Cyan
+On_White='\e[47m'       # White
+
+NC="\e[m"               # Color Reset
+
+ALERT=${BWhite}${On_Red} # Bold White on red background
+
+#export PS1='\[[1m\]<\h:\W>\[[m\]'
+
+set prompt = "%{\033[32m%}%p%{\033[0m%} %{\033[31m%}%n%{\033[0m%}@%{\033[34m%}%m%{\033[0m%}:%~% "
+set history = 10000
+set savehist = 10000
+
+# Test connection type:
+if [ -n "${SSH_CONNECTION}" ]; then
+    CNX=${Cyan}        # Connected on remote machine, via ssh (good).
+elif [[ "${DISPLAY%%:0*}" != "" ]]; then
+    CNX=${ALERT}        # Connected on remote machine, not via ssh (bad).
+else
+    CNX=${BGreen}        # Connected on local machine.
+fi
+
+# Test user type:
+if [[ ${USER} == "root" ]]; then
+    SU=${ALERT}           # User is root.
+elif [[ ${USER} != drhodes ]]; then
+    SU=${BRed}          # User is not login user.
+else
+    SU=${Red}         # User is normal (well ... most of us are).
+fi
+
+NCPU=$(grep -c 'processor' /proc/cpuinfo)    # Number of CPUs
+SLOAD=$(( 100*${NCPU} ))        # Small load
+MLOAD=$(( 200*${NCPU} ))        # Medium load
+XLOAD=$(( 400*${NCPU} ))        # Xlarge load
+
+# Returns system load as percentage, i.e., '40' rather than '0.40)'.
+function load()
+{
+    local SYSLOAD=$(cut -d " " -f1 /proc/loadavg | tr -d '.')
+    # System load of the current host.
+    echo $((10#$SYSLOAD))       # Convert to decimal.
+}
+
+
+# Returns a color indicating system load.
+function load_color()
+{
+    local SYSLOAD=$(load)
+    if [ ${SYSLOAD} -gt ${XLOAD} ]; then
+        echo -en ${ALERT}
+    elif [ ${SYSLOAD} -gt ${MLOAD} ]; then
+        echo -en ${Red}
+    elif [ ${SYSLOAD} -gt ${SLOAD} ]; then
+        echo -en ${BRed}
+    else
+        echo -en ${BGreen}
+    fi
+}
+
+function disk_color()
+{
+    if [ ! -w "${PWD}" ] ; then
+        echo -en ${Red}
+        # No 'write' privilege in the current directory.
+    elif [ -s "${PWD}" ] ; then
+        local used=$(command df -P "$PWD" |
+                   awk 'END {print $5} {sub(/%/,"")}')
+        if [ ${used} -gt 95 ]; then
+            echo -en ${ALERT}           # Disk almost full (>95%).
+        elif [ ${used} -gt 90 ]; then
+            echo -en ${BRed}            # Free disk space almost gone.
+        else
+            echo -en ${BGreen}           # Free disk space is ok.
+        fi
+    else
+        echo -en ${Cyan}
+        # Current directory is size '0' (like /proc, /sys etc).
+    fi
+}
+
+# Returns a color according to running/suspended jobs.
+function job_color()
+{
+    if [ $(jobs -s | wc -l) -gt "0" ]; then
+        echo -en ${BRed}
+    elif [ $(jobs -r | wc -l) -gt "0" ] ; then
+        echo -en ${BCyan}
+    fi
+}
+
+# Now we construct the prompt.
+PROMPT_COMMAND="history -a"
+case ${TERM} in
+  *term* | rxvt | linux)
+        #PS1="\[\$(load_color)\][\A\[${NC}\] "
+        # Time of day (with load info):
+        PS1="\[\$(load_color)\][\A\[${NC}\] "
+        # User@Host (with connection type info):
+        PS1=${PS1}"\[${SU}\]\u\[${NC}\]@\[${CNX}\]\h\[${NC}\] "
+        # PWD (with 'disk space' info):
+        PS1=${PS1}"\[\$(disk_color)\]\W]\[${NC}\] "
+        # Prompt (with 'job' info):
+        PS1=${PS1}"\[\$(job_color)\]>\[${NC}\] "
+        # Set title of current xterm:
+        PS1=${PS1}"\[\e]0;[\u@\h] \w\a\]"
+        ;;
+    *)
+        PS1="(\A \u@\h \W) > " # --> PS1="(\A \u@\h \w) > "
+                               # --> Shows full pathname of current dir.
+        ;;
+esac
+#export PS1=${PS1}
+
+export TIMEFORMAT=$'\nreal %3R\tuser %3U\tsys %3S\tpcpu %P\n'
+export HISTIGNORE="&:bg:fg:ll:h"
+export HISTTIMEFORMAT="$(echo -e ${BCyan})[%d/%m %H:%M:%S]$(echo -e ${NC}) "
+export HISTCONTROL=ignoredups
