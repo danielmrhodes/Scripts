@@ -183,8 +183,8 @@ void Compare(bool offset = true) {
 
   double Nsim = 50000000.0;
   //double Nsim = 10000000.0;
-  GH2* h2 = (GH2*)f->Get("Bambino2/SecPID_Det1_proj");
-  GH1* h = (GH1*)h2->ProjectionX();
+  GH2D* h2 = (GH2D*)f->Get("Bambino2/SecPID_Det1_proj");
+  GH1D* h = (GH1D*)h2->ProjectionX();
   for(int i=0;i<24;i++) {
     
     double cnts = h->GetBinContent(i+1);

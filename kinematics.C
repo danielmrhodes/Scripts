@@ -6,14 +6,17 @@
 //double beam_Z = 10.;
 //double beam_mass = 22349.9;
 
-//80Ge
+//68,80Ge
 //double beam_Z = 32.;
+//double beam_mass = 63274.6;
 //double beam_mass = 74441.6;
 
-//78,80Kr
+//78,80,84,86Kr
 double beam_Z = 36.;
 double beam_mass = 72582.4;
 //double beam_mass = 74442.6;
+//double beam_mass = 78163.1;
+//double beam_mass = 80025.2;
 
 //40S
 //double beam_Z = 16.;
@@ -28,16 +31,16 @@ double beam_mass = 72582.4;
 //double targ_mass = 193688.0;
 
 //48Ti
-//double targ_Z = 22.;
-//double targ_mass = 44652.;
+double targ_Z = 22.;
+double targ_mass = 44652.;
 
 //196Pt
 //double targ_Z = 78.;
 //double targ_mass = 182540.;
 
 //197Au
-double targ_Z = 79.;
-double targ_mass = 183473.2;
+//double targ_Z = 79.;
+//double targ_mass = 183473.2;
 
 //110Pd
 //double targ_Z = 46.;
@@ -48,10 +51,14 @@ double targ_mass = 183473.2;
 //double Ep = 294.0; //106Cd Ti
 //double Ep = 268.0; //80Ge, 80Kr
 //double Ep = 281.6; //80Ge
+//double Ep = 278.8; //68Ge
 //double Ep = 131.0; //40S
 //double Ep = 487.7; //128Xe
 //double Ep = 77.0; //24Ne
-double Ep = 413.0; //78Kr HE
+//double Ep = 413.0; //78Kr HE
+//double Ep = 278.0; //78Kr LE
+//double Ep = 317.8; //2023 78Kr mid-target energy (196Pt)
+double Ep = 200.;
 
 double Ex = 0.0;
 
@@ -60,7 +67,7 @@ int lineWidth = 4;
 int markerStyle = 20;
 double markerSize = 1.5;
 
-double Theta_CM_FP(double ThetaLAB, bool sol2=false) {
+double Theta_CM_FP(double ThetaLAB, bool sol2 = false) {
   
   double tau = (beam_mass/targ_mass)/std::sqrt(1 - (Ex/Ep)*(1 + beam_mass/targ_mass));
   
@@ -80,7 +87,7 @@ double Theta_CM_FP(double ThetaLAB, bool sol2=false) {
   
 }
 
-double Theta_CM_FR(double ThetaLAB, bool sol2=false) {
+double Theta_CM_FR(double ThetaLAB, bool sol2 = false) {
   
   double tau = 1.0/std::sqrt(1 - (Ex/Ep)*(1 + beam_mass/targ_mass));
   
@@ -206,6 +213,14 @@ double Esafe(int beam_A, int targ_A) {
   double fac = 1.439965*beam_Z*targ_Z*(beam_A + targ_A)/double(targ_A);
 
   return fac/Rmin;
+}
+
+double Esafe(double thetaCM, int beam_A, int targ_A) {
+
+  double Rmin = 1.25*(TMath::Power(double(beam_A),1./3.) + TMath::Power(double(targ_A),1./3.)) + 5.0;
+  double fac = 0.5*1.439965*beam_Z*targ_Z*(beam_A + targ_A)/double(targ_A);
+  
+  return (fac/Rmin)*(1 + 1.0/TMath::Sin(thetaCM/2.0));
 }
 
 double ECB(int beam_A, int targ_A) {

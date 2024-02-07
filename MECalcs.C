@@ -109,6 +109,17 @@ double q(double tme, double dme) {
   
 }
 
+double q(double gamma_deg) {
+
+  double d2r = TMath::DegToRad();
+  
+  double t1 = 3.0*TMath::Cos(3.0*gamma_deg*d2r);
+  double t2 = 9.0 - 8.0*TMath::Sin(3.0*gamma_deg*d2r)*TMath::Sin(3.0*gamma_deg*d2r);
+
+  return t1/TMath::Sqrt(t2);
+  
+}
+
 double c3dLO(double tme, double dme) {
 
   double fac = -1.0/((2.0/7.0)*TMath::Sqrt(16.0*TMath::Pi()/5.0));
